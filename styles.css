@@ -108,7 +108,39 @@ body {
 /* ---------------------------------------------- */
 
 .calculator-box {
-    background-color: rgb(33, 30, 56);
-    height: 60%;
-    width: 70%;
+    display: grid;
+    grid-template-rows: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    max-width: 300px;
+    margin: 20px auto;
+    background-color: #692525;
+    padding: 2em;
+    border-radius: 20px;
+}
+
+.gridBox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    background-color: #444;
+    color: #fff;
+    border-radius: 5px;
+    padding: 10px;
+    transition: scale 200ms ease;
+}
+
+.gridBox:active {
+    scale: 0.9;
+}
+
+.gridBox:hover {
+    cursor: pointer;
+}
+
+.screen {
+    grid-column: span 4;
+    background-color: #222;
+    font-size: 2rem;
 }
