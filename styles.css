@@ -143,4 +143,5 @@ body {
     grid-column: span 4;
     background-color: #222;
     font-size: 2rem;
+    overflow: auto;
 }
