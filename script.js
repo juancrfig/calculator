@@ -6,6 +6,9 @@ const subButton = document.querySelector('.substraction');
 const multButton = document.querySelector('.multiplication');
 const divButton = document.querySelector('.division');
 const arrayOperators = ['+', '-', '*', '÷']
+let leftNumber = '';
+let rightNumber = '';
+let operator = '';
 
 numbers.forEach((number) => {
     number.addEventListener('click', () => {
@@ -20,7 +23,7 @@ deleteButton.addEventListener('click', () => {
 addButton.addEventListener('click', () => {
     if (checkForOperators()) {
     } else {
-        screen.textContent+= '+';
+        changeVariables('+');
     };
 })
 
@@ -38,20 +41,37 @@ function checkForOperators() {
 subButton.addEventListener('click', () => {
     if (checkForOperators()) {
     } else {
-        screen.textContent+= '-';
+        changeVariables('-');
     };
 })
 
 multButton.addEventListener('click', () => {
     if (checkForOperators()) {
     } else {
-        screen.textContent+= '×';
-    };
+        changeVariables('*');
+    }
 })
 
 divButton.addEventListener('click', () => {
     if (checkForOperators()) {
     } else {
-        screen.textContent+= '÷';
+        changeVariables('/');
     };
 })
+
+
+function changeVariables(operatorTyped) {
+
+    
+    if (operator === '') {
+        leftNumber = screen.textContent;
+        operator = operatorTyped;
+        screen.textContent = '';
+        console.log(`The left number is ${leftNumber}`)
+    } else if (leftNumber) {
+        rightNumber = screen.textContent;
+        console.log(`The right number is ${rightNumber}`)
+    }
+    console.log(`The operator is ${operatorTyped}`)
+
+}
