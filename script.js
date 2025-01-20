@@ -102,28 +102,24 @@ function operate(firstNumber, operator, secondNumber) {
 calculatorElm.addEventListener('click', checkInput);
 document.addEventListener('keydown', checkInput);
 
-
 function checkInput() {
     console.clear()
     let inputValue = screen.textContent;
 
     const leftAndIndex = [...takeLeftNumber(inputValue)];
 
-    // console.log(leftAndIndex)
-
     const leftNumber = leftAndIndex[0]; 
     const operator = leftAndIndex[1];
+
     const slideIndex = leftAndIndex[2] + 1;
-    console.log(`Taking number right with slicing index ${slideIndex}`)
-    const rightNumber = takeNumberRight(inputValue, slideIndex);
-    
-    
+    const rightNumberAndNextOperator = [...takeNumberRight(inputValue, slideIndex)];
 
+    const rightNumber = rightNumberAndNextOperator[0];
+    const nextOperator = rightNumberAndNextOperator[1];
 
-  
-    console.log(`Left: ${leftNumber}. Right: ${rightNumber}. Operator: ${operator}`)
+    
+    console.log(`RightNumber: ${rightNumber} and NextOperator: ${nextOperator}`)
 }
-
 
 function takeLeftNumber(stringInScreen) {
 
@@ -147,14 +143,15 @@ function takeNumberRight(stringInScreen, slideIndex) {
     
     let rightNumber = '';
     const rightSide = stringInScreen.slice(slideIndex);
+    let nextOperator = null;
 
     for (char of rightSide) {
         if (!isNaN(char)) {
             rightNumber += char;
         } else {
+            nextOperator = char;
             break;
         }
     }
-    console.log(`rightNumber from takeNumberRight : ${rightNumber}`)
-    return rightNumber;
+    return [rightNumber, nextOperator];
 }
