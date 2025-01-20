@@ -12,6 +12,36 @@ const multButton = document.querySelector('.multiplication');
 const divButton = document.querySelector('.division');
 const arrayOperators = ['+', '-', '*', '/']
 
+
+
+// ACTIVATE EVENT LISTENERS FOR KEYDOWN IN ALL THE DOCUMENT
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Delete' || e.key === 'Backspace') {clearScreen()}
+    if (e.key === '0') { screen.textContent += '0'}
+    if (e.key === '1') { screen.textContent += '1'}
+    if (e.key === '2') { screen.textContent += '2'}
+    if (e.key === '3') { screen.textContent += '3'}
+    if (e.key === '4') { screen.textContent += '4'}
+    if (e.key === '5') { screen.textContent += '5'}
+    if (e.key === '6') { screen.textContent += '6'}
+    if (e.key === '7') { screen.textContent += '7'}
+    if (e.key === '8') { screen.textContent += '8'}
+    if (e.key === '9') { screen.textContent += '9'}
+})
+
+
+// LOGIC FOR CLEANING THE SCREEN
+
+function clearScreen() {
+    screen.textContent = '';
+}
+
+deleteButton.addEventListener('click', clearScreen);
+
+
+
+
 //  CALCULATION FUNCTIONS
 
 function add(firstNumber, secondNumber) {
@@ -50,4 +80,14 @@ function operate(firstNumber, operator, secondNumber) {
             return false;
     }
 }
+
+
+// ADD EVENT LISTENER TO NUMBERS 
+
+numbersElms.forEach( numberElm => {
+    const number = numberElm.classList[2]; 
+    numberElm.addEventListener('click', () => {
+        screen.textContent += number;
+    })
+})
 
