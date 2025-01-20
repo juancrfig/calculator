@@ -1,3 +1,4 @@
+const calculatorElm = document.querySelector('.calculator-box')
 const screen = document.querySelector('.screen');
 const numbersElms = document.querySelectorAll('.number');
 const numbers = [...numbersElms];
@@ -14,7 +15,7 @@ const arrayOperators = ['+', '-', '*', '/']
 
 
 
-// ACTIVATE EVENT LISTENERS FOR KEYDOWN IN ALL THE DOCUMENT
+// ACTIVATE EVENT LISTENERS FOR KEYBOARD IN ALL THE DOCUMENT
 
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Delete' || e.key === 'Backspace') {clearScreen()}
@@ -28,6 +29,11 @@ document.addEventListener('keydown', (e) => {
     if (e.key === '7') { screen.textContent += '7'}
     if (e.key === '8') { screen.textContent += '8'}
     if (e.key === '9') { screen.textContent += '9'}
+    if (e.key === '+') { screen.textContent += '+'}
+    if (e.key === '-') { screen.textContent += '-'}
+    if (e.key === '*') { screen.textContent += '*'}
+    if (e.key === '/') { screen.textContent += '/'}
+    if (e.key === 'Enter') { }
 })
 
 
@@ -40,9 +46,17 @@ function clearScreen() {
 deleteButton.addEventListener('click', clearScreen);
 
 
+// ADD CLICK EVENT LISTENER TO NUMBERS 
+
+numbersElms.forEach( numberElm => {
+    const number = numberElm.classList[2]; 
+    numberElm.addEventListener('click', () => {
+        screen.textContent += number;
+    })
+})
 
 
-//  CALCULATION FUNCTIONS
+//  CALCULATOR FUNCTIONS
 
 function add(firstNumber, secondNumber) {
     return firstNumber + secondNumber;
@@ -82,12 +96,65 @@ function operate(firstNumber, operator, secondNumber) {
 }
 
 
-// ADD EVENT LISTENER TO NUMBERS 
 
-numbersElms.forEach( numberElm => {
-    const number = numberElm.classList[2]; 
-    numberElm.addEventListener('click', () => {
-        screen.textContent += number;
-    })
-})
+// ADD CHECK INPUT FUNCTIONALITY
 
+calculatorElm.addEventListener('click', checkInput);
+document.addEventListener('keydown', checkInput);
+
+
+function checkInput() {
+    console.clear()
+    let inputValue = screen.textContent;
+
+    const leftAndIndex = [...takeLeftNumber(inputValue)];
+
+    // console.log(leftAndIndex)
+
+    const leftNumber = leftAndIndex[0]; 
+    const operator = leftAndIndex[1];
+    const slideIndex = leftAndIndex[2] + 1;
+    console.log(`Taking number right with slicing index ${slideIndex}`)
+    const rightNumber = takeNumberRight(inputValue, slideIndex);
+    
+    
+
+
+  
+    console.log(`Left: ${leftNumber}. Right: ${rightNumber}. Operator: ${operator}`)
+}
+
+
+function takeLeftNumber(stringInScreen) {
+
+    let leftNumber = '';
+    let slideIndex = null;
+    let operator = null;
+
+    for (char of stringInScreen) {
+        if (!isNaN(char)) {
+            leftNumber += char;
+        } else {
+            slideIndex = stringInScreen.indexOf(char);
+            operator = stringInScreen[slideIndex];
+            break;
+        }
+    }
+    return [leftNumber, operator, slideIndex];
+}
+
+function takeNumberRight(stringInScreen, slideIndex) {
+    
+    let rightNumber = '';
+    const rightSide = stringInScreen.slice(slideIndex);
+
+    for (char of rightSide) {
+        if (!isNaN(char)) {
+            rightNumber += char;
+        } else {
+            break;
+        }
+    }
+    console.log(`rightNumber from takeNumberRight : ${rightNumber}`)
+    return rightNumber;
+}
