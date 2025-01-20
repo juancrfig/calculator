@@ -1,77 +1,99 @@
 const screen = document.querySelector('.screen');
-const numbers = document.querySelectorAll('.number');
+const numbersElms = document.querySelectorAll('.number');
+const numbers = [...numbersElms];
+
+const operatorsElms = document.querySelectorAll('.operator');
+const operators = [...operatorsElms];
+
 const deleteButton = document.querySelector('.erase');
 const addButton = document.querySelector('.addition');
 const subButton = document.querySelector('.substraction');
 const multButton = document.querySelector('.multiplication');
 const divButton = document.querySelector('.division');
-const arrayOperators = ['+', '-', '*', '÷']
-let leftNumber = '';
-let rightNumber = '';
-let operator = '';
+const arrayOperators = ['+', '-', '*', '/']
 
-numbers.forEach((number) => {
+let leftNumber = 0;
+let rightNumber = 0;
+let currentOperator = '';
+let screenValue = '';
+
+
+
+
+//  CALCULATION FUNCTIONS
+
+function add(firstNumber, secondNumber) {
+    return firstNumber + secondNumber;
+}
+
+function subtract(firstNumber, secondNumber) {
+    return firstNumber - secondNumber;
+}
+
+function multiply(firstNumber, secondNumber) {
+    return firstNumber * secondNumber;
+}
+
+function divide(firstNumber, secondNumber) {
+
+    if (secondNumber === 0) {
+        alert('Division by zero is not defined in maths!');
+    } else {
+        return firstNumber / secondNumber
+    }
+}
+
+function operate(firstNumber, operator, secondNumber) {
+
+    switch (operator) {
+        case '+':
+            return add(firstNumber, secondNumber);
+        case '-':
+            return subtract(firstNumber, secondNumber);
+        case '*':
+            return multiply(firstNumber, secondNumber);
+        case '/':
+            return divide(firstNumber, secondNumber);
+        default:
+            alert('Ingresa un operador válido!');
+    }
+}
+
+
+numbers.forEach( number => {
     number.addEventListener('click', () => {
-        screen.textContent += number.classList[2];
+        screenValue += number.classList[2];
+        screen.textContent = screenValue;
+    })
+})
+
+operators.forEach( operator => {
+
+    const operatorSymbol = operator.classList[3] 
+    operator.addEventListener('click', () => {
+
+        if (!leftNumber) {
+            leftNumber = screenValue;
+            currentOperator = operatorSymbol;
+            screenValue = '';
+            screen.textContent = '';    
+        } else if (!rightNumber && operatorSymbol === '=') {
+            rightNumber = screenValue;
+            const result = operate(Number(leftNumber), currentOperator, Number(rightNumber));
+            console.log(result)
+            screen.textContent = String(result);
+            currentOperator = '';
+            screenValue = String(result);
+        }
+        else if (leftNumber &&  rightNumber && operator.classList[3] === '=') {
+            console.log()
+        }
+        
     })
 })
 
 deleteButton.addEventListener('click', () => {
-    screen.textContent = screen.textContent.slice(0, -1);
+    screenValue = '';
+    screen.textContent = '';
 })
 
-addButton.addEventListener('click', () => {
-    if (checkForOperators()) {
-    } else {
-        changeVariables('+');
-    };
-})
-
-function checkForOperators() {
-    const length = screen.textContent.length;
-    if (arrayOperators.includes(screen.textContent[length -1])) {
-        return true;
-    } else if (screen.textContent === '') {
-        return true
-    } else {
-        return false;
-    }
-}
-
-subButton.addEventListener('click', () => {
-    if (checkForOperators()) {
-    } else {
-        changeVariables('-');
-    };
-})
-
-multButton.addEventListener('click', () => {
-    if (checkForOperators()) {
-    } else {
-        changeVariables('*');
-    }
-})
-
-divButton.addEventListener('click', () => {
-    if (checkForOperators()) {
-    } else {
-        changeVariables('/');
-    };
-})
-
-
-function changeVariables(operatorTyped) {
-
-    
-    if (operator === '') {
-        leftNumber = screen.textContent;
-        operator = operatorTyped;
-        screen.textContent = '';
-        console.log(`The left number is ${leftNumber}`)
-    } else if (leftNumber) {
-        rightNumber = screen.textContent;
-        console.log(`The right number is ${rightNumber}`)
-    }
-    console.log(`The operator is ${operatorTyped}`)
-
-}
