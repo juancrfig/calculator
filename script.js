@@ -12,12 +12,13 @@ const multButton = document.querySelector('.multiplication');
 const divButton = document.querySelector('.division');
 const arrayOperators = ['+', '-', '*', '/']
 
-let leftNumber = 0;
-let rightNumber = 0;
-let currentOperator = '';
+let leftNumber = null;
+let rightNumber = null;
+let currentOperator = null;
 let screenValue = '';
 
-
+let flag = false;
+let numberInDisplay = false;
 
 
 //  CALCULATION FUNCTIONS
@@ -56,44 +57,66 @@ function operate(firstNumber, operator, secondNumber) {
             return divide(firstNumber, secondNumber);
         default:
             alert('Ingresa un operador válido!');
+            return false;
     }
 }
 
 
 numbers.forEach( number => {
     number.addEventListener('click', () => {
+
+        if (flag) {
+            resetValues()
+        }
         screenValue += number.classList[2];
         screen.textContent = screenValue;
+        numberInDisplay = true;
     })
 })
 
 operators.forEach( operator => {
 
-    const operatorSymbol = operator.classList[3] 
+    const enteredOperator = operator.classList[3];
+    let result = 0;
     operator.addEventListener('click', () => {
 
-        if (!leftNumber) {
+        if (!numberInDisplay && leftNumber === null) {
+            console.log('Try first to enter a number, jackass :p')
+        } else if (numberInDisplay && !leftNumber) {
             leftNumber = screenValue;
-            currentOperator = operatorSymbol;
+            currentOperator = enteredOperator;
+            screen.textContent = '';
             screenValue = '';
-            screen.textContent = '';    
-        } else if (!rightNumber && operatorSymbol === '=') {
-            rightNumber = screenValue;
-            const result = operate(Number(leftNumber), currentOperator, Number(rightNumber));
-            console.log(result)
-            screen.textContent = String(result);
-            currentOperator = '';
-            screenValue = String(result);
+            numberInDisplay = false;
+        } else if (leftNumber != null && currentOperator != null ) {
+            currentOperator = enteredOperator;
         }
-        else if (leftNumber &&  rightNumber && operator.classList[3] === '=') {
-            console.log()
-        }
-        
+
+        console.log(`Left number was ${leftNumber}`)
+        // console.log(`Right number was ${rightNumber}`)
+        console.log(`currentOperator was ${currentOperator}`)
     })
 })
 
+function prepareNextCalculation(result) {
+    leftNumber = result;
+    rightNumber = 0;
+    screen.textContent = String(result);
+    currentOperator = '';
+    screenValue = 0;
+    flag = true;
+}
+
 deleteButton.addEventListener('click', () => {
+    resetValues();
+})
+
+function resetValues() {
     screenValue = '';
     screen.textContent = '';
-})
+    rightNumber = null;
+    leftNumber = null;
+    currentOperator = '';
+    flag = false;
+}
 
