@@ -12,13 +12,6 @@ const multButton = document.querySelector('.multiplication');
 const divButton = document.querySelector('.division');
 const arrayOperators = ['+', '-', '*', '/']
 
-let leftNumber = null;
-let rightNumber = null;
-let currentOperator = null;
-let screenValue = '';
-let input = '';
-
-
 //  CALCULATION FUNCTIONS
 
 function add(firstNumber, secondNumber) {
@@ -54,31 +47,7 @@ function operate(firstNumber, operator, secondNumber) {
         case '/':
             return divide(firstNumber, secondNumber);
         default:
-            alert('Ingresa un operador válido!');
             return false;
     }
 }
-
-
-numbers.forEach( number => {
-    const digit = number.classList[2];
-    number.addEventListener('click', () => {
-        input += digit;
-        console.log(input)
-    })
-})
-
-operators.forEach( operator => {
-
-    const enteredOperator = operator.classList[3];
-    operator.addEventListener('click', () => {
-        input += enteredOperator;
-        console.log(input)
-    })
-})
-
-deleteButton.addEventListener('click', () => {
-    resetValues();
-})
-
 
