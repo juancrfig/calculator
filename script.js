@@ -68,9 +68,17 @@ numbers.forEach( number => {
         if (flag) {
             resetValues()
         }
-        screenValue += number.classList[2];
-        screen.textContent = screenValue;
-        numberInDisplay = true;
+
+        if (currentOperator) {
+            screenValue += number.classList[2];
+            screen.textContent = screenValue;
+            numberInDisplay = true;
+            rightNumber = screenValue;
+        } else {
+            screenValue += number.classList[2];
+            screen.textContent = screenValue;
+            numberInDisplay = true;
+        }
     })
 })
 
@@ -88,12 +96,15 @@ operators.forEach( operator => {
             screen.textContent = '';
             screenValue = '';
             numberInDisplay = false;
-        } else if (leftNumber != null && currentOperator != null ) {
+        } else if (leftNumber != null && enteredOperator === '=' && rightNumber) {
+            result = operate(leftNumber, currentOperator, rightNumber);
+            prepareNextCalculation(result);
+        } else if (leftNumber != null && currentOperator != null) {
             currentOperator = enteredOperator;
         }
 
         console.log(`Left number was ${leftNumber}`)
-        // console.log(`Right number was ${rightNumber}`)
+        console.log(`Right number was ${rightNumber}`)
         console.log(`currentOperator was ${currentOperator}`)
     })
 })
