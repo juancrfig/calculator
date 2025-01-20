@@ -16,9 +16,7 @@ let leftNumber = null;
 let rightNumber = null;
 let currentOperator = null;
 let screenValue = '';
-
-let flag = false;
-let numberInDisplay = false;
+let input = '';
 
 
 //  CALCULATION FUNCTIONS
@@ -63,71 +61,24 @@ function operate(firstNumber, operator, secondNumber) {
 
 
 numbers.forEach( number => {
+    const digit = number.classList[2];
     number.addEventListener('click', () => {
-
-        if (flag) {
-            resetValues()
-        }
-
-        if (currentOperator) {
-            screenValue += number.classList[2];
-            screen.textContent = screenValue;
-            numberInDisplay = true;
-            rightNumber = screenValue;
-        } else {
-            screenValue += number.classList[2];
-            screen.textContent = screenValue;
-            numberInDisplay = true;
-        }
+        input += digit;
+        console.log(input)
     })
 })
 
 operators.forEach( operator => {
 
     const enteredOperator = operator.classList[3];
-    let result = 0;
     operator.addEventListener('click', () => {
-
-        if (!numberInDisplay && leftNumber === null) {
-            console.log('Try first to enter a number, jackass :p')
-        } else if (numberInDisplay && !leftNumber) {
-            leftNumber = screenValue;
-            currentOperator = enteredOperator;
-            screen.textContent = '';
-            screenValue = '';
-            numberInDisplay = false;
-        } else if (leftNumber != null && enteredOperator === '=' && rightNumber) {
-            result = operate(leftNumber, currentOperator, rightNumber);
-            prepareNextCalculation(result);
-        } else if (leftNumber != null && currentOperator != null) {
-            currentOperator = enteredOperator;
-        }
-
-        console.log(`Left number was ${leftNumber}`)
-        console.log(`Right number was ${rightNumber}`)
-        console.log(`currentOperator was ${currentOperator}`)
+        input += enteredOperator;
+        console.log(input)
     })
 })
-
-function prepareNextCalculation(result) {
-    leftNumber = result;
-    rightNumber = 0;
-    screen.textContent = String(result);
-    currentOperator = '';
-    screenValue = 0;
-    flag = true;
-}
 
 deleteButton.addEventListener('click', () => {
     resetValues();
 })
 
-function resetValues() {
-    screenValue = '';
-    screen.textContent = '';
-    rightNumber = null;
-    leftNumber = null;
-    currentOperator = '';
-    flag = false;
-}
 
