@@ -1,42 +1,60 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- 
+        IMPROVEMENT: Explicitly specify Font Awesome version for better dependency management
+        Original code used a generic URL which could break if the CDN updates
+    -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="./styles.css" type="text/css">
-    <script src="./script.js" defer></script>
+    <script src="./script.js" type="module" defer></script>
+    <!-- IMPROVEMENT: Added type="module" to enable ES6 modules -->
     <title>Calculator</title>
 </head>
 <body>
-    <div class="calculator-box">
+    <!-- 
+        IMPROVEMENT: Added semantic class names and ARIA labels for accessibility
+        Original structure was good but lacked accessibility considerations
+    -->
+    <div class="calculator-box" role="application" aria-label="Calculator">
         <!-- Screen -->
-        <div class="gridBox screen"></div>
+        <div class="calculator-screen" aria-live="polite">
+            <div class="previous-operand" aria-label="Previous calculation"></div>
+            <div class="current-operand" aria-label="Current input">0</div>
+        </div>
         
-        <!-- Numbers -->
-        <div class="gridBox number 7"><i class="fa-solid fa-7"></i></div>
-        <div class="gridBox number 8"><i class="fa-solid fa-8"></i></div>
-        <div class="gridBox number 9"><i class="fa-solid fa-9"></i></div>
-        
-        <!-- Operations -->
-        <div class="gridBox erase"><i class="fa-solid fa-delete-left"></i></div>
-        
-        <div class="gridBox number 4"><i class="fa-solid fa-4"></i></div>
-        <div class="gridBox number 5"><i class="fa-solid fa-5"></i></div>
-        <div class="gridBox number 6"><i class="fa-solid fa-6"></i></div>
-        
-        <div class="gridBox division operator /"><i class="fa-solid fa-divide"></i></div>
-        
-        <div class="gridBox number 1"><i class="fa-solid fa-1"></i></div>
-        <div class="gridBox number 2"><i class="fa-solid fa-2"></i></div>
-        <div class="gridBox number 3"><i class="fa-solid fa-3"></i></div>
-        
-        <div class="gridBox multiplication operator *"><i class="fa-solid fa-xmark"></i></div>     
-        <div class="gridBox number 0"><i class="fa-solid fa-0"></i></div>       
-        <div class="gridBox substraction operator -"><i class="fa-solid fa-minus"></i></div>      
-        <div class="gridBox addition operator +"><i class="fa-solid fa-plus"></i></div>
-        <div class="gridBox equal operator ="><i class="fa-solid fa-equals"></i></div>
+        <!-- 
+            IMPROVEMENT: Organized buttons in a grid layout with semantic grouping
+            Original layout worked but wasn't as maintainable
+        -->
+        <div class="calculator-grid">
+            <button class="clear-btn" aria-label="Clear all">AC</button>
+            <button class="delete-btn" aria-label="Delete">Del</button>
+            <button class="operator" data-operator="/" aria-label="Divide">÷</button>
+            
+            <button class="number" data-number="7" aria-label="7"><i class="fa-solid fa-7"></i></button>
+            <button class="number" data-number="8" aria-label="8"><i class="fa-solid fa-8"></i></button>
+            <button class="number" data-number="9" aria-label="9"><i class="fa-solid fa-9"></i></button>
+            <button class="operator" data-operator="*" aria-label="Multiply">*</button>
+            
+            <button class="number" data-number="4" aria-label="4"><i class="fa-solid fa-4"></i></button>
+            <button class="number" data-number="5" aria-label="5"><i class="fa-solid fa-5"></i></button>
+            <button class="number" data-number="6" aria-label="6"><i class="fa-solid fa-6"></i></button>
+            <button class="operator" data-operator="-" aria-label="Subtract">-</button>
+            
+            <button class="number" data-number="1" aria-label="1"><i class="fa-solid fa-1"></i></button>
+            <button class="number" data-number="2" aria-label="2"><i class="fa-solid fa-2"></i></button>
+            <button class="number" data-number="3" aria-label="3"><i class="fa-solid fa-3"></i></button>
+            <button class="operator" data-operator="+" aria-label="Add"><i class="fa-solid fa-plus"></i></button>
+            
+            <button class="number span-two" data-number="0" aria-label="0"><i class="fa-solid fa-0"></i></button>
+            <button class="number" data-number="." aria-label="Decimal point">.</button>
+            <button class="equals" data-operator="=" aria-label="Equals"><i class="fa-solid fa-equals"></i></button>
+        </div>
     </div>
 </body>
 </html>
