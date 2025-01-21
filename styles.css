@@ -146,3 +146,7 @@ body {
     font-size: 1.6rem;
     overflow: auto;
 }
+
+.pressed {
+    filter: brightness(1.5);
+}

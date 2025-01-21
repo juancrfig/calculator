@@ -49,8 +49,12 @@ function clearScreen() {
     currentOperator = null;
     leftNumber = null;
     rightNumber = null;
+    operationWhappening = false;
     console.clear();
-}
+    for (op of operatorsElms) {
+            op.classList.remove('pressed')
+        } 
+    }
 
 deleteButton.addEventListener('click', clearScreen);
 
@@ -59,8 +63,14 @@ deleteButton.addEventListener('click', clearScreen);
 
 numbersElms.forEach( numberElm => {
     const number = numberElm.classList[2]; 
-    numberElm.addEventListener('click', () => {
-        screen.textContent += number;
+    numberElm.addEventListener('click', (e) => {
+
+        if (e.target.closest('.number').classList.contains('0') && !screen.textContent) {
+            console.log('First number cannot be  zero, jackass!');
+        } else {
+            console.log('adding number to screen')
+            screen.textContent += number;
+        }
     })
 })
 
@@ -68,8 +78,12 @@ numbersElms.forEach( numberElm => {
 
 operatorsElms.forEach( operatorElm => {
     const operator = operatorElm.classList[3];
-    operatorElm.addEventListener('click', () => {
-        currentOperator = operator;
+    operatorElm.addEventListener('click', (e) => {
+        if (e.target.closest('.operator').classList.contains('=')) {
+        } else if (!screen.textContent) {
+        } else {
+            currentOperator = operator;
+        }
     })
 })
 
@@ -98,6 +112,9 @@ function divide(firstNumber, secondNumber) {
 
 function operate(firstNumber, operator, secondNumber) {
 
+    firstNumber = Number(firstNumber);
+    secondNumber = Number(secondNumber);
+
     switch (operator) {
         case '+':
             return add(firstNumber, secondNumber);
@@ -122,30 +139,71 @@ let rightNumber = null;
 let nextOperator = null;
 let operationReady = false;
 let result = null;
+let operationWhappening = false;
 
 function checkInput(e) {
 
-    if ( (e.key === '=' || e.target.closest('.operator').classList[3] === '=') && leftNumber && rightNumber) {
+
+    let equalSignClick = false;
+    try {
+        equalSignClick = e.target.closest('.operator').classList.contains('=');
+    } catch (TypeError) {
+    }
+    
+    if ( (e.key === '=' || equalSignClick) && leftNumber && rightNumber) {
+        console.clear()
         console.log('operating equal sign')
-        console.log(currentOperator)
         result = operate(leftNumber, currentOperator, rightNumber);
         screen.textContent = result;
         leftNumber = result;
         rightNumber = null;
         currentOperator = null;
-    }
+        operationWhappening = true;
+    } else if ( (e.target.closest('.operator') || arrayOperators.includes(e.key) ) && currentOperator && leftNumber) {
+        for (op of operatorsElms) {
+            op.classList.remove('pressed')
+            if (op.classList.contains(e.key)) {
+                op.classList.add('pressed')
+            } 
+        }
+        if (!operationWhappening) {
+            rightNumber = screen.textContent;
+            result = operate(leftNumber, currentOperator, rightNumber);
+            screen.textContent = result;
+            leftNumber = result;
+            rightNumber = null;
+            operationWhappening = true;
+        } else {
+            console.clear()
+            screen.textContent = '';
+            operationWhappening = false;
 
-    if ( (e.target.closest('.operator') || arrayOperators.includes(e.key) ) && currentOperator && leftNumber) {
-        rightNumber = screen.textContent;
-        result = operate(leftNumber, currentOperator, rightNumber);
-        screen.textContent = result;
-        leftNumber = result;
+            result = operate(leftNumber, currentOperator, rightNumber);
+            screen.textContent = result;
+            leftNumber = result;
+            rightNumber = null;
+        }
+
+    } else if (currentOperator && leftNumber && operationWhappening) {
+        screen.textContent = '';
+
     } else if (currentOperator && leftNumber) {
+        console.clear()
+        console.log('assigning right number')
         rightNumber = screen.textContent;
-    } else if (!leftNumber && currentOperator) {
+    } else if (currentOperator && !screen.textContent) {
+        console.clear()
+        console.log('First enter a number idiot!');
+    } else if (!leftNumber && currentOperator && !screen.textContent) {
+        console.clear()
+        console.log('Nice attempt to mess around!')
+    } else if (!leftNumber && currentOperator && screen.textContent) {
+        console.log('assigning left number')
         leftNumber = screen.textContent;
         screen.textContent = '';
-    } else if (e.target.closest('.operator') && currentOperator && leftNumber && rightNumber) {
-        console.log('gotcha3!');
     }
+
+    console.log(leftNumber)
+    console.log(currentOperator)
+    console.log(rightNumber)
 }
