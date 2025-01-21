@@ -41,6 +41,7 @@ document.addEventListener('keydown', (e) => {
 
 function clearScreen() {
     screen.textContent = '';
+    console.clear()
 }
 
 deleteButton.addEventListener('click', clearScreen);
@@ -102,23 +103,23 @@ function operate(firstNumber, operator, secondNumber) {
 calculatorElm.addEventListener('click', checkInput);
 document.addEventListener('keydown', checkInput);
 
+let leftNumber = '';
+let slideIndex = null;
+let operator = null;
+
 function checkInput() {
-    console.clear()
     let inputValue = screen.textContent;
+
+
 
     const leftAndIndex = [...takeLeftNumber(inputValue)];
 
-    const leftNumber = leftAndIndex[0]; 
+    const leftNumber = leftAndIndex[0];
     const operator = leftAndIndex[1];
+    const sliceIndex = leftAndIndex[2];
 
-    const slideIndex = leftAndIndex[2] + 1;
-    const rightNumberAndNextOperator = [...takeNumberRight(inputValue, slideIndex)];
+    console.log(leftNumber, operator, sliceIndex)
 
-    const rightNumber = rightNumberAndNextOperator[0];
-    const nextOperator = rightNumberAndNextOperator[1];
-
-    
-    console.log(`RightNumber: ${rightNumber} and NextOperator: ${nextOperator}`)
 }
 
 function takeLeftNumber(stringInScreen) {
@@ -142,7 +143,7 @@ function takeLeftNumber(stringInScreen) {
 function takeNumberRight(stringInScreen, slideIndex) {
     
     let rightNumber = '';
-    const rightSide = stringInScreen.slice(slideIndex);
+    const rightSide = stringInScreen.slice(slideIndex + 1);
     let nextOperator = null;
 
     for (char of rightSide) {
