@@ -202,8 +202,4 @@ function checkInput(e) {
         leftNumber = screen.textContent;
         screen.textContent = '';
     }
-
-    console.log(leftNumber)
-    console.log(currentOperator)
-    console.log(rightNumber)
 }
