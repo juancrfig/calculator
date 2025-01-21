@@ -13,13 +13,19 @@ const multButton = document.querySelector('.multiplication');
 const divButton = document.querySelector('.division');
 const arrayOperators = ['+', '-', '*', '/']
 
-
+let currentOperator = null;
 
 // ACTIVATE EVENT LISTENERS FOR KEYBOARD IN ALL THE DOCUMENT
 
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Delete' || e.key === 'Backspace') {clearScreen()}
-    if (e.key === '0') { screen.textContent += '0'}
+    if (e.key === '0') {
+        if (screen.textContent === '') {
+            console.log('First number cannot be  zero, jackass!');
+        } else {
+            screen.textContent += '0'
+        }
+    }
     if (e.key === '1') { screen.textContent += '1'}
     if (e.key === '2') { screen.textContent += '2'}
     if (e.key === '3') { screen.textContent += '3'}
@@ -29,11 +35,10 @@ document.addEventListener('keydown', (e) => {
     if (e.key === '7') { screen.textContent += '7'}
     if (e.key === '8') { screen.textContent += '8'}
     if (e.key === '9') { screen.textContent += '9'}
-    if (e.key === '+') { screen.textContent += '+'}
-    if (e.key === '-') { screen.textContent += '-'}
-    if (e.key === '*') { screen.textContent += '*'}
-    if (e.key === '/') { screen.textContent += '/'}
-    if (e.key === 'Enter') { }
+    if (e.key === '+') { currentOperator = '+'}
+    if (e.key === '-') { currentOperator = '-'}
+    if (e.key === '*') { currentOperator = '*'}
+    if (e.key === '/') { currentOperator = '/'}
 })
 
 
@@ -41,7 +46,10 @@ document.addEventListener('keydown', (e) => {
 
 function clearScreen() {
     screen.textContent = '';
-    console.clear()
+    currentOperator = null;
+    leftNumber = null;
+    rightNumber = null;
+    console.clear();
 }
 
 deleteButton.addEventListener('click', clearScreen);
@@ -56,6 +64,14 @@ numbersElms.forEach( numberElm => {
     })
 })
 
+// ADD CLICK EVENT LISTENER TO OPERATORS
+
+operatorsElms.forEach( operatorElm => {
+    const operator = operatorElm.classList[3];
+    operatorElm.addEventListener('click', () => {
+        currentOperator = operator;
+    })
+})
 
 //  CALCULATOR FUNCTIONS
 
@@ -96,63 +112,40 @@ function operate(firstNumber, operator, secondNumber) {
     }
 }
 
-
-
 // ADD CHECK INPUT FUNCTIONALITY
 
 calculatorElm.addEventListener('click', checkInput);
 document.addEventListener('keydown', checkInput);
 
-let leftNumber = '';
-let slideIndex = null;
-let operator = null;
+let leftNumber = null;
+let rightNumber = null;
+let nextOperator = null;
+let operationReady = false;
+let result = null;
 
-function checkInput() {
-    let inputValue = screen.textContent;
+function checkInput(e) {
 
-
-
-    const leftAndIndex = [...takeLeftNumber(inputValue)];
-
-    const leftNumber = leftAndIndex[0];
-    const operator = leftAndIndex[1];
-    const sliceIndex = leftAndIndex[2];
-
-    console.log(leftNumber, operator, sliceIndex)
-
-}
-
-function takeLeftNumber(stringInScreen) {
-
-    let leftNumber = '';
-    let slideIndex = null;
-    let operator = null;
-
-    for (char of stringInScreen) {
-        if (!isNaN(char)) {
-            leftNumber += char;
-        } else {
-            slideIndex = stringInScreen.indexOf(char);
-            operator = stringInScreen[slideIndex];
-            break;
-        }
+    if ( (e.key === '=' || e.target.closest('.operator').classList[3] === '=') && leftNumber && rightNumber) {
+        console.log('operating equal sign')
+        console.log(currentOperator)
+        result = operate(leftNumber, currentOperator, rightNumber);
+        screen.textContent = result;
+        leftNumber = result;
+        rightNumber = null;
+        currentOperator = null;
     }
-    return [leftNumber, operator, slideIndex];
-}
 
-function takeNumberRight(stringInScreen, slideIndex) {
-    
-    let rightNumber = '';
-    const rightSide = stringInScreen.slice(slideIndex + 1);
-    let nextOperator = null;
-
-    for (char of rightSide) {
-        if (!isNaN(char)) {
-            rightNumber += char;
-        } else {
-            nextOperator = char;
-            break;
-        }
+    if ( (e.target.closest('.operator') || arrayOperators.includes(e.key) ) && currentOperator && leftNumber) {
+        rightNumber = screen.textContent;
+        result = operate(leftNumber, currentOperator, rightNumber);
+        screen.textContent = result;
+        leftNumber = result;
+    } else if (currentOperator && leftNumber) {
+        rightNumber = screen.textContent;
+    } else if (!leftNumber && currentOperator) {
+        leftNumber = screen.textContent;
+        screen.textContent = '';
+    } else if (e.target.closest('.operator') && currentOperator && leftNumber && rightNumber) {
+        console.log('gotcha3!');
     }
-    return [rightNumber, nextOperator];
 }
